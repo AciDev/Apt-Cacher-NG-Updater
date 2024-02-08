@@ -17,6 +17,7 @@ def main():
     browserless_argument = args.browserless
     
     driver = create_con(browserless_argument)
+    driver.set_page_load_timeout(3600)
     driver.get(f"{url_argument}/acng-report.html")
     click(driver, "doImport")
     driver.quit()
@@ -24,6 +25,7 @@ def main():
     time.sleep(5)
     
     driver = create_con(browserless_argument)
+    driver.set_page_load_timeout(3600)
     driver.get(f"{url_argument}/acng-report.html")
     click(driver, "doDownload")
     click(driver, "doMirror")
