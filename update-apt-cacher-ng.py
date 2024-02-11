@@ -16,26 +16,29 @@ def main():
     url_argument = args.url
     browserless_argument = args.browserless
     
-    driver = create_con(browserless_argument)
-    try: 
-        driver.get(f"{url_argument}/acng-report.html")
-        click(driver, "doImport")
-        driver.quit()
+    try:
+        driver = create_con(browserless_argument)
+        url = f"{url_argument}/acng-report.html"
+        driver_handle(driver, url, ["doImport"])
     except:
         driver.quit()
         driver = None
         driver = create_con(browserless_argument)
-        driver.get(f"{url_argument}/acng-report.html")
-        click(driver, "doImport")
-        driver.quit()
+        url = f"{url_argument}/acng-report.html"
+        driver_handle(driver, url, ["doImport"])
     
     time.sleep(5)
-    
-    driver = create_con(browserless_argument)
-    driver.get(f"{url_argument}/acng-report.html")
-    click(driver, "doDownload")
-    click(driver, "doMirror")
-    driver.quit()
+
+    try:
+        driver = create_con(browserless_argument)
+        url = f"{url_argument}/acng-report.html"
+        driver_handle(driver, url, ["doDownload", "doMirror"])
+    except:
+        driver.quit()
+        driver = None
+        driver = create_con(browserless_argument)
+        url = f"{url_argument}/acng-report.html"
+        driver_handle(driver, url, ["doDownload", "doMirror"])
 
 def create_con(browserless):
     chrome_options = Options()
@@ -48,6 +51,12 @@ def create_con(browserless):
         options=chrome_options
     )
     return driver
+
+def driver_handle(driver, url, clicks):
+    driver.get(url)
+    for i in clicks:
+        click(driver, i)
+    driver.quit()
 
 def click(driver, name):
     elem = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.NAME, name)))
